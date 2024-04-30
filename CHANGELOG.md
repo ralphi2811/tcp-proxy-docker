@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.0
+
+- Update alpine version to latest.
+
+
 ## 1.1.0
 
 - Use exec to forward signals to socat (#1).
