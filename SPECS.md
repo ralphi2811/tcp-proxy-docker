@@ -14,33 +14,33 @@ Mise en place d'une solution de redirection de ports TCP pour permettre l'accès
 
 ### 2.1 Vue d'ensemble
 ```
-                                  +------------------------+
-Internet -----------------------> |   VM Ubuntu (OVH)      |
-                                  |   Proxy TCP Docker     |
-                                  |   UFW Firewall         |
-                                  |   Tailscale Client     |
-                                  +------------------------+
-                                              |
-                                              |
-                                        Tailscale VPN
-                                      (--accept-routes)
-                                              |
-                                              v
-                                  +------------------------+
-                                  |     Subnet Routeur     |
-                                  |     172.17.240.1       |
-                                  +------------------------+
-                                              |
-                                              |
-                                              v
-               +----------------+    +----------------+    +----------------+
-               |    Dépôt 1     |    |    Dépôt 2     |    |    Dépôt 3     |
-               | 172.17.1.0/24  |    | 172.17.2.0/24  |    | 172.17.3.0/24  |
-               +----------------+    +----------------+    +----------------+
-               |  TPE1: .10     |    |  TPE1: .10     |    |  TPE1: .10     |
-               |  TPE2: .11     |    |  TPE2: .11     |    |  TPE2: .11     |
-               |  TPE3: .12     |    |  TPE3: .12     |    |  TPE3: .12     |
-               +----------------+    +----------------+    +----------------+
+                            +------------------------+
+Internet -----------------> |   VM Ubuntu (OVH)      |
+                            |   Proxy TCP Docker     |
+                            |   UFW Firewall         |
+                            |   Tailscale Client     |
+                            +------------------------+
+                                        |
+                                        |
+                                  Tailscale VPN
+                                (--accept-routes)
+                                        |
+                                        v
+                            +------------------------+
+                            |     Subnet Routeur     |
+                            |     172.17.240.1       |
+                            +------------------------+
+                                        |
+                                        |
+                                        v
+         +----------------+    +----------------+    +----------------+
+         |    Dépôt 1     |    |    Dépôt 2     |    |    Dépôt 3     |
+         | 172.17.1.0/24  |    | 172.17.2.0/24  |    | 172.17.3.0/24  |
+         +----------------+    +----------------+    +----------------+
+         |  TPE1: .10     |    |  TPE1: .10     |    |  TPE1: .10     |
+         |  TPE2: .11     |    |  TPE2: .11     |    |  TPE2: .11     |
+         |  TPE3: .12     |    |  TPE3: .12     |    |  TPE3: .12     |
+         +----------------+    +----------------+    +----------------+
 ```
 
 ### 2.2 Infrastructure
@@ -148,10 +148,10 @@ ufw enable
 
 ### 4.2 Matrice de Flux
 ```
-Source          Destination     Port       Protocol    Description
------------     ------------   ---------   --------    -----------
-IP_ADMIN        VM             22          TCP        SSH Admin
-IP_AUTORISEE    VM             1XXYY       TCP        Accès TPE (XX=dépôt, YY=TPE)
+Source        Destination   Port     Protocol  Description
+-----------   ------------ --------- --------  -----------
+IP_ADMIN      VM           22        TCP      SSH Admin
+IP_AUTORISEE  VM           1XXYY     TCP      Accès TPE (XX=dépôt, YY=TPE)
 ```
 
 ## 5. Surveillance et Maintenance
@@ -211,14 +211,14 @@ ip route show table 52  # Table de routage Tailscale
 
 ### 7.1 Schéma de Flux Détaillé
 ```
-Client                    VM Proxy                    Routeur                     TPE
-  |                         |                          |                          |
-  |---(Port 1XXYY)--------->|                          |                          |
-  |                         |-----[Tailscale VPN]----->|                          |
-  |                         |                          |---(Port 8888)----------->|
-  |                         |                          |                          |
-  |<------------------------+--------------------------|--------------------------|
-  |                         |                          |                          |
+Client                VM Proxy              Routeur                  TPE
+  |                     |                      |                      |
+  |---(Port 1XXYY)----->|                      |                      |
+  |                     |---[Tailscale VPN]--->|                      |
+  |                     |                      |---(Port 8888)------->|
+  |                     |                      |                      |
+  |<--------------------+----------------------|----------------------|
+  |                     |                      |                      |
 ```
 
 Note: Le trafic entre la VM et les TPE passe par le tunnel Tailscale et est routé via le subnet 172.17.240.1
