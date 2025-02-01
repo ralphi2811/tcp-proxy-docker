@@ -49,7 +49,7 @@ Internet -----------------> |   VM Ubuntu (OVH)      |
 - Ubuntu 22.04 LTS
 - Docker + Docker Compose
 - UFW (Pare-feu)
-- Ports exposés : 9001-9099
+- Ports exposés : 10001-17299
 - Tailscale Client avec --accept-routes
 - Connexion au subnet routeur 172.17.240.1
 
